@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ceakerBot
+  main:
+    allow-circular-references: true
+    
+
+
+# bot specific configuration
+ceakerBot:
+    token: ${T_TOKEN}
+    name: ${T_NAME}
+    welcomeMessage: welcome message
+
+
+    
