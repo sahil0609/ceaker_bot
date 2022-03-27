@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import com.github.ceakerBot.DTO.CommandDTO;
 import com.github.ceakerBot.commands.Command;
 import com.github.ceakerBot.commands.enums.CommandsEnum;
+import com.github.ceakerBot.exceptions.BotException;
 import com.github.ceakerBot.exceptions.Invalidcommand;
 import com.github.ceakerBot.utils.SendUtils;
 
@@ -50,7 +51,7 @@ public class CommandHandler implements Handler {
             .findFirst()
             .orElseThrow(() -> new Invalidcommand("no command found of that type", "Invalid Command. Type /help to get the list of the commands"))
             .execute(currentCommand, update);
-        } catch (Invalidcommand e) {           
+        } catch (BotException e) {           
             log.error("Error occured while processing the command");
             send.sendErrorMessage(e, update.getMessage().getChatId().toString());
             e.printStackTrace();

@@ -11,6 +11,14 @@ ceakerBot:
     token: ${T_TOKEN}
     name: ${T_NAME}
     welcomeMessage: welcome message
+    
+    
+reddit:
+    username: ${R_USERNAME}
+    password: ${R_PASSWORD}
+    clientId: ${R_CLIENTID}
+    clientSecret: ${R_CLIENTSEC}
+    userAgent: "linux:com.test_bot:v1.0:fetcher12bot"
 
 
     
