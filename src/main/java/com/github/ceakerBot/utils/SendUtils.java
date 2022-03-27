@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import com.github.ceakerBot.bot.CeakerBot;
 import com.github.ceakerBot.exceptions.BotException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 public class SendUtils {
 
     //circular dependency so that I can send request anywhere in the code
-    private  TelegramLongPollingBot bot;
+    private  CeakerBot bot;
     
     @Autowired
-    SendUtils(@Lazy TelegramLongPollingBot bot){
+    SendUtils(@Lazy CeakerBot bot){
         this.bot = bot;
     }
     
@@ -30,6 +32,14 @@ public class SendUtils {
        
         
     }
+    
+    
+    
+    public void sendImageMessage(SendPhoto message) throws TelegramApiException {
+        
+        bot.sendPhoto(message);
+    }
+    
     
     public void sendErrorMessage(BotException exception, String chatId) {
         

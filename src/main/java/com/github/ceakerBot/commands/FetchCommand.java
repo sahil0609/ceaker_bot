@@ -1,9 +1,14 @@
 package com.github.ceakerBot.commands;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -49,17 +54,89 @@ public class FetchCommand implements ValidCommand {
         
         posts.get(0).forEach((post) -> {
             
-            SendMessage message = SendMessage.builder().chatId(update.getMessage().getChatId().toString()).text(post.getTitle()).build();
-            
-            try {
-                send.sendMessage(message);
-            } catch (TelegramApiException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+           sendMessage(post, update);
             
         });
        
+    }
+    
+    
+    
+    
+    public void sendMessage(Submission post, Update update) {
+        
+        if(post.isSelfPost()) {
+            sendTextMessage(post, update);
+            
+        }
+        
+        else if(post.getPostHint() != null && post.getPostHint().toUpperCase().equals("IMAGE")) {
+            sendImage(post, update);
+        }
+        
+        else {
+            
+            log.info("message not supported right now. Message Type " + post.getPostHint());
+        }
+        
+        
+    }
+    
+    
+    
+    private void sendTextMessage(Submission post, Update update) {
+        
+       
+        String title = post.getTitle();
+        String body = post.getSelfText();
+        
+        String message = "<b>" + title + "</b>" + 
+                        " --- " +
+                        "<pre> \n\n " +
+                            body +
+                        " </pre>";
+        
+        
+        SendMessage telegramMessage = SendMessage.builder()
+                .chatId(update.getMessage().getChatId().toString())
+                .text(message)
+                .parseMode("HTML")
+                .build();
+        
+        try {
+            send.sendMessage(telegramMessage);
+        } catch (TelegramApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+               
+    }
+    
+    
+    private void sendImage(Submission post, Update update) {
+        
+        
+        String title = post.getTitle();
+        String imageURL = post.getUrl();
+        
+        try {
+            SendPhoto message = new SendPhoto();
+            message.setPhoto(new InputFile(imageURL));
+            message.setChatId(update.getMessage().getChatId().toString());
+            message.setCaption(title);
+          
+            
+           send.sendImageMessage(message);
+        } catch (TelegramApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+       
+        
+        
+        
+        
     }
     
     

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.NetworkAdapter;
@@ -12,7 +13,7 @@ import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.oauth.Credentials;
 import net.dean.jraw.oauth.OAuthHelper;
 
-@Configuration
+@Configuration()
 public class RedditClientConf {
     
     private final String username;
@@ -35,6 +36,11 @@ public class RedditClientConf {
         this.userAgent = userAgent;
         
         
+    }
+    
+    @Bean
+    public DefaultBotOptions options() {
+        return new DefaultBotOptions();
     }
     
     @Bean
